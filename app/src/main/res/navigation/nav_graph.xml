@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ContactListFragment">
+
+    <fragment
+        android:id="@+id/ContactListFragment"
+        android:name="my.edu.tarc.mycontact.ui.contact_list.ContactListFragment"
+        android:label="@string/contact_list_fragment_label"
+        tools:layout="@layout/fragment_contact_list">
+
+        <action
+            android:id="@+id/action_ContactListFragment_to_AddContactFragment"
+            app:destination="@id/AddContactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/AddContactFragment"
+        android:name="my.edu.tarc.mycontact.ui.add_contact.AddContactFragment"
+        android:label="@string/add_contact_fragment_label"
+        tools:layout="@layout/fragment_add_contact">
+
+        <action
+            android:id="@+id/action_AddContactFragment_to_ContactListFragment"
+            app:destination="@id/ContactListFragment" />
+    </fragment>
+</navigation>
