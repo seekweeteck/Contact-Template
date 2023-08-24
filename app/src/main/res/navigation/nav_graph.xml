@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_ContactListFragment_to_AddContactFragment"
             app:destination="@id/AddContactFragment" />
+        <action
+            android:id="@+id/action_ContactListFragment_to_ProfileFragment"
+            app:destination="@id/ProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/AddContactFragment"
@@ -25,4 +28,9 @@
             android:id="@+id/action_AddContactFragment_to_ContactListFragment"
             app:destination="@id/ContactListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/ProfileFragment"
+        android:name="my.edu.tarc.mycontact.ui.profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

@@ -55,6 +55,7 @@ class AddContactFragment : Fragment(), MenuProvider {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menu.findItem(R.id.action_settings).setVisible(false)
+        menu.findItem(R.id.action_profile).setVisible(false)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

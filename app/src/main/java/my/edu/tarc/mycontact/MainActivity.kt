@@ -39,8 +39,10 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener{controller, destination, arguments->
             when(destination.id){
-                R.id.AddContactFragment ->
+                R.id.AddContactFragment, R.id.ProfileFragment ->{
                     binding.fab.visibility = View.INVISIBLE
+                }
+
                 else ->
                     binding.fab.visibility = View.VISIBLE
             }
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_profile -> {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_ContactListFragment_to_ProfileFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
