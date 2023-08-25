@@ -15,6 +15,7 @@ class ProfileViewModel: ViewModel() {
     }
 
     //For encapsulation we use LiveData
+    //get() = getter
     val profile: LiveData<Profile> get() = _profile
 
     fun setProfile(p: Profile){
