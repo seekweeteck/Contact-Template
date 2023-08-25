@@ -35,11 +35,6 @@ class ProfileFragment : Fragment(), MenuProvider {
     val profileViewModel: ProfileViewModel by viewModels()
     private lateinit var myPreference: SharedPreferences
 
-    val getContent = registerForActivityResult(ActivityResultContracts.GetContent()){ uri: Uri? ->
-        //uri = location of your profile picture
-        binding.imageViewProfile.setImageURI(uri)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -68,8 +63,6 @@ class ProfileFragment : Fragment(), MenuProvider {
             phone = myPreference.getString(getString(R.string.phone), "").toString()
         }
 
-        readProfilePicture()
-
         profileViewModel.profile.observe(viewLifecycleOwner) {
             binding.editTextProfileName.setText(it.name)
             binding.editTextProfileEmail.setText(it.email)
@@ -84,8 +77,6 @@ class ProfileFragment : Fragment(), MenuProvider {
                     binding.editTextProfilePhone.text.toString()
                 )
             )
-
-            saveProfilePicture()
 
             with(myPreference.edit()) {
                 putString(
@@ -104,13 +95,9 @@ class ProfileFragment : Fragment(), MenuProvider {
             }
         }//End of buttonSave
 
-        binding.imageViewProfile.setOnClickListener {
-            getContent.launch("image/*")
-        }
     }//end of onViewCreated
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menu.findItem(R.id.action_about_us).setVisible(false)
         menu.findItem(R.id.action_settings).setVisible(false)
         menu.findItem(R.id.action_profile).setVisible(false)
     }
@@ -121,40 +108,6 @@ class ProfileFragment : Fragment(), MenuProvider {
         }
 
         return true
-    }
-
-    private fun saveProfilePicture() {
-        val filename = "profile.png"
-        val file = File(this.context?.filesDir, filename)
-
-        val bd = binding.imageViewProfile.getDrawable() as BitmapDrawable
-        val bitmap = bd.bitmap
-        val outputStream: OutputStream
-
-        try{
-            outputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, outputStream)
-            outputStream.flush()
-            outputStream.close()
-        }catch (e: FileNotFoundException){
-            e.printStackTrace()
-        }
-    }
-
-    private fun readProfilePicture(){
-        val filename = "profile.png"
-        val file = File(this.context?.filesDir, filename)
-
-        try{
-            if(!file.exists()){
-                binding.imageViewProfile.setImageResource(R.drawable.profile)
-            }else{
-                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                binding.imageViewProfile.setImageBitmap(bitmap)
-            }
-        }catch (e: FileNotFoundException){
-            e.printStackTrace()
-        }
     }
 
 }
