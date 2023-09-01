@@ -10,10 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import my.edu.tarc.mycontact.R
 import my.edu.tarc.mycontact.databinding.FragmentAddContactBinding
+import my.edu.tarc.mycontact.ui.contact_list.Contact
+import my.edu.tarc.mycontact.ui.contact_list.ContactViewModel
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -25,6 +28,8 @@ class AddContactFragment : Fragment(), MenuProvider {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val contactViewModel: ContactViewModel
+                by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +45,15 @@ class AddContactFragment : Fragment(), MenuProvider {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSave.setOnClickListener {
-            findNavController().navigate(R.id.action_AddContactFragment_to_ContactListFragment)
+            //Insert a new contact to the contact list (View Model)
+            val newContact = Contact(
+                binding.editTextName.text.toString(),
+                binding.editTextEmailAddress.text.toString(),
+                binding.editTextPhone.text.toString()
+            )
+            //contactViewModel.contactList.value!!.add(newContact)
+            contactViewModel.insert(newContact)
+            findNavController().navigateUp()
         }
 
         //Add support for menu
