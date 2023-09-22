@@ -42,4 +42,8 @@ class ContactViewModel(application: Application): AndroidViewModel(application) 
     fun update(contact: Contact) = viewModelScope.launch {
         repository.update(contact)
     }
+
+    fun uploadContactList(contact_id: String) = viewModelScope.launch {
+        repository.uploadContactList(contact_id)
+    }
 }

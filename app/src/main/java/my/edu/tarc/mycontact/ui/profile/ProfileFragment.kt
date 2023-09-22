@@ -14,12 +14,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import my.edu.tarc.mycontact.R
 import my.edu.tarc.mycontact.databinding.FragmentAddContactBinding
 import my.edu.tarc.mycontact.databinding.FragmentProfileBinding
@@ -101,8 +106,9 @@ class ProfileFragment : Fragment(), MenuProvider {
                 )
                 apply()
             }
-
+            saveProfile()
             saveProfilePicture()
+            uploadProfilePicture()
         }//End of buttonSave
 
         binding.imageViewProfile.setOnClickListener {
@@ -115,6 +121,8 @@ class ProfileFragment : Fragment(), MenuProvider {
         menu.findItem(R.id.action_settings).setVisible(false)
         menu.findItem(R.id.action_profile).setVisible(false)
         menu.findItem(R.id.action_about_us).setVisible(false)
+        menu.findItem(R.id.action_upload).setVisible(false)
+        menu.findItem(R.id.action_download).setVisible(false)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -123,6 +131,24 @@ class ProfileFragment : Fragment(), MenuProvider {
         }
 
         return true
+    }
+
+    private fun saveProfile(){
+        //Create an instance of Firebase Database
+        val firebaseDatabase = Firebase.database
+        //Create a reference to the database
+        val myRef = firebaseDatabase.getReference("profile")
+        with(myRef.child(profileViewModel.profile.value!!.phone)){
+            child("name").setValue(
+                profileViewModel.profile.value!!.name)
+
+            child("email").setValue(
+                profileViewModel.profile.value!!.email)
+
+            child("phone").setValue(
+                profileViewModel.profile.value!!.phone)
+        }
+
     }
 
     private fun saveProfilePicture() {
@@ -142,6 +168,25 @@ class ProfileFragment : Fragment(), MenuProvider {
         }catch (e: FileNotFoundException){
             e.printStackTrace()
         }
+    }
+
+    private fun uploadProfilePicture(){
+        val filename = "profile.png"
+        val file = File(this.context?.filesDir, filename)
+        //Create an instance of Firebase Storage
+        val firebaseStorage = Firebase.storage
+        //Create a reference (a folder) to the storage
+        val myRef = firebaseStorage.reference
+            .child("profile")
+            .child(profileViewModel.profile.value!!.phone)
+
+        //Upload the file to firebase storage
+        myRef.putFile(file.toUri())
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "File Uploaded",
+                    Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { }
     }
 
     private fun readProfilePicture(){

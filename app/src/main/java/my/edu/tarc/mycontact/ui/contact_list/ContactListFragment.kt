@@ -98,6 +98,15 @@ class ContactListFragment : Fragment(), MenuProvider {
             downloadContact(requireContext(),
             getString(R.string.read_url) +
                     "contact_id=" + contact_id)
+        }else if(menuItem.itemId == R.id.action_upload){
+            val myPreference: SharedPreferences =
+                requireActivity().getPreferences(Context.MODE_PRIVATE)
+            val contact_id = myPreference.getString(
+                getString(R.string.phone), "")
+            if(!contact_id.isNullOrEmpty()){
+                contactViewModel.uploadContactList(contact_id)
+            }
+
         }
         return true
     }
