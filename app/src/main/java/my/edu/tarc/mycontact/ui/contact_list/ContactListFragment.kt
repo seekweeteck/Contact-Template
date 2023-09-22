@@ -123,8 +123,8 @@ class ContactListFragment : Fragment(), MenuProvider {
                             var jsonContact: JSONObject = jsonArray.getJSONObject(i)
                             var contact = Contact(
                                 jsonContact.getString("name"),
-                                jsonContact.getString("phone"),
-                                jsonContact.getString("email")
+                                jsonContact.getString("email"),
+                                jsonContact.getString("phone")
                             )
                             contactViewModel.insert(
                                 Contact(contact?.name!!,
